@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>COMP3133 Lab Test 1</title>
+   </head>
+   
+   <body>
+      <h1>Sign Up For the Chat App</h1>
+      <div id = "error-container"></div>
+      <label for="name">Username</label><br>
+      <input id = "name" type = "text" name = "name" value = "" 
+         placeholder = "Enter your nickname!">
+      <br/><br>
+      <label for="fname">First name</label><br>
+      <input id = "fname" type = "text" name = "fname" value = "" 
+         placeholder = "Enter your first name!">
+        <br><br>
+      <label for="lname">lastname</label><br>
+      <input id = "lname" type = "text" name = "lname" value = "" 
+           placeholder = "Enter your last name!">
+      <br><br>
+      <label for="psw"><b>Password</b></label><br>
+      <input id="psw" type="password" placeholder="Enter Password" name="psw" required>
+      <br><br>
+
+      <button id="signupbtn" type="submit" class="signupbtn">Sign Up</button>
+      
+      <button type = "button" name = "button" onclick = "document.location='index.html'">
+         Join Chat Room
+      </button>
+
+      <script src="/socket.io/socket.io.js"></script>
+      <script>
+          const client = io() // this line calls executed
+
+          client.on("connect", () => {
+             console.log(socket.id);
+          });
+
+          $(() => {
+             $("#signupbtn").click(() => {
+                sendMessage({username: $("name").val(), firstname: $("#fname").val(), lastname: $("#lname").val(),  password: $("#psw")});
+             })
+          })
+
+          //store user info in mongoDB
+          function sendMessage(userInfo){
+             $.post('http://localhost:3000/user', userInfo)
+          }
+
+      </script>
+   </body>
+</html>

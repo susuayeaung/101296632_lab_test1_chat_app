@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>COMP3133 Lab Test 1</title>
+</head>
+<body>
+    <h1>Welcome to the Chat App</h1>
+        <input type="text" name="username"
+            placeholder="username"><br><br>
+        <input type="password" name="password"
+            placeholder="password"><br><br>
+        <button id="loginbtn">login</button><br><br>
+    <h3>Please sign up here if you are a new user.</h3>
+    <button type = "button" name = "button" onclick = "document.location='signup.html'">
+        Sign Up
+    </button>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        $(() => {
+            $("#loginbtn").click(() => {
+                $.get('http://localhost:3000/user', (data) => {
+                    data.map(addUser);
+                })
+            })
+        })
+
+        function addUser(user){
+            if($("#username").val() == user.username && $("#psw").val() == user.password){
+                localStorage.setItem('loggedInUser', user.username)
+                window.location.href = 'room.html'
+            }else{
+                document.getElementById('loginbtn').value = localStorage.getItem('logedInUser')
+            }
+        }
+    </script>
+</body>
+</html> 

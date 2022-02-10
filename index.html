@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>COMP3133 Lab Test 1</title>
+   </head>
+   
+   <body>
+      <h1>Chat App</h1>
+         <div id = "error-container"></div>
+      <label for="name">Username</label><br>
+      <input id = "name" type = "text" name = "name" value = "" 
+         placeholder = "Enter your name!">
+      <br/><br>
+      <label for="rooms">Room</label><br>
+      <select name="rooms" id="rooms">
+         <option value="news">News</option>
+         <option value="covid19">Covid19</option>
+         <option value="nodejs">NodeJS</option>
+      </select>
+      <br><br>
+      <button type = "button" name = "button" onclick = "document.location='room.html'">
+         Join Chat Room
+      </button>
+
+      <button type = "button" name = "button" onclick = "document.location='signup.html'">
+         Sign Up
+      </button>
+      <br/><br>
+      
+      <script src="/socket.io/socket.io.js"></script>
+      <script>
+         document.getElementById('name').value = localStorage.getItem('logedInUser')
+      </script>
+   </body>
+</html>

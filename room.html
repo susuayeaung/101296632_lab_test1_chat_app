@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>COMP3133 Lab Test 1</title>
+   </head>
+
+   <style>
+       .topnav{
+           background-color: darkcyan;
+       }
+       .tab{
+           tab-size: 2;
+       }
+       .column1{
+           float: left;
+           width: 20%;
+           padding: 10px;
+           height: 300px; 
+       }
+       .column2{
+           float: right;
+           width: 60%;
+       }
+       .container{
+          border: 2px solid black;
+       }
+       /* .bottom{
+           background-color: darkcyan;
+       } */
+   </style>
+   
+   <body>
+       <div class="topnav">
+           <h1>Chat App</h1>  
+       </div>
+      <main>
+         <div class="column1">
+            <p>Room name: <span id="roomName"></span></p> 
+            <p>Members: <span id="members"></span></p>
+        </div> 
+      </main>
+
+       <div class="column2"></div>
+       <br><br><br><br><br>
+       <div id="conversation">
+        <input id = "senderName" type = "text" name = "name" value = "" 
+        placeholder = "Enter your name!"><br><br>
+        <input id = "message" type = "text" name = "message" value = "" 
+        placeholder = "Enter message to send!"><br><br>
+        <button id = "send" type = "button" name = "button" onclick = "sendMessage()">
+        Send
+        </button>
+        <button id="leaveBtn" type="button" name="button" class="tab">Leave room</button>
+       </div><br>
+       <div id = "messages">
+         <h3>Chat Messages: </h3>
+
+       </div>
+      <script src="/socket.io/socket.io.js"></script>
+      <script>
+         const client = io() // this line calls executed
+
+         client.on("toConnect", (chatter) => {
+            console.log(chatter);
+            
+            $("#message").append(`
+            <div>
+               <p>${chatter.senderName}</p>
+               <p>${chatter.message}</p>
+            </div>`)
+         })
+
+         client.on("join", (chatter) => {
+            console.log(chatter);
+
+            $("#message").append(`
+            <div>
+               <p>${chatter.senderName}</p>
+               <p>${chatter.message}</p>
+            </div>`)
+         })
+
+         const query = window.location.search;
+         const url = new URLSearchParams(query);
+
+         const roomUrl = urlParams.get('room')
+         const memberUrl = urlParams.get('members')
+
+         $("#roomName").append(`${roomUrl}`)
+         $("#members").append(`${memberUrl}`)
+
+         $(() => {
+            $("#conversation").submit((e) => {
+               e.preventDefault();
+               const msg = $("#message").val()
+
+               client.emit('userInfo', {username: usernameUrl, room: roomUrl, message: msg});
+
+               sendMessage({member: memberUrl, room: roomUrl, message: msg})
+            })
+            getMessage(roomUrl)
+         })
+
+         function getMessages(room){
+            $.get('http://localhost:3000/messages', (data) => {
+               data.filter(info => {
+                  return info.room == room;
+               }).map(chatInfo => {
+                  $("#messages").append(`
+                  <div>
+                     <p>${chatInfo.senderName}</p>
+                     <p>${chatInfo.message}</p>
+                  </div>`)
+               })
+            })
+         }
+
+         document.getElementById('#leaveBtn').addEventListener(onclick, () => {
+            window.location.href = 'index.html'
+         })
+
+         function sendMessage(message){
+            $.post('http://localhost:3000/messages', message)
+         }
+         
+      </script>
+   </body>
+</html>
